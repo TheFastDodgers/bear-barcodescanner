@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import styled from "@emotion/styled";
 import BarcodeScannerComponent from "react-webcam-barcode-scanner";
 import ScanTakerModal from "../../modals/scan-taker-modal/scan-taker-modal";
@@ -13,7 +13,7 @@ function ScanBarcodes() {
     const [ dataScan, setDataScan ] = React.useState('Not Found');
 
     const letItShow = function (err: any, result: any) {
-        if (result && result.text && result.text != '' && result.text != ' ') {
+        if (result && result.text && result.text !== '' && result.text !== ' ') {
             setDataScan(result.text);
             setShowScannerModal(true)
         }
