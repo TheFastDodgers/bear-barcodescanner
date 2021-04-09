@@ -1,22 +1,14 @@
-import React from 'react';
-import BarcodeScannerComponent from "react-webcam-barcode-scanner";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import ScanBarcodes from "./views/scan-barcodes/scan-barcodes";
 
 function App() {
-
-  const [ data, setData ] = React.useState('Not Found');
-
   return (
-    <>
-      <BarcodeScannerComponent
-        width={800}
-        height={200}
-        onUpdate={(err: any, result: any) => {
-          if (result) setData(result.text)
-          else setData('Not Found')
-        }}
-      />
-      <p>{data}</p>
-    </>
+      <Router>
+          <div>
+              <Route exact path="/" component={ScanBarcodes} />
+              <Route exact path="/demo" component={ScanBarcodes} />
+          </div>
+      </Router>
   )
 }
 
