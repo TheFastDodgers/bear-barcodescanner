@@ -16,7 +16,7 @@ const ScannerBottom = styled.div`
 `;
 
 function BarcodeScanner() {
-  const [dataScan, setDataScan] = React.useState('Not Found');
+  const [barcode, setBarcode] = React.useState('Not Found');
   const [showScannerModal, setShowScannerModal] = useState(false);
   const windowSize: IWindowSize = UseWindowSize();
 
@@ -24,7 +24,7 @@ function BarcodeScanner() {
     if (result && result.text && result.text !== '' && result.text !== ' ') {
       try {
         const barcode = result.text;
-        setDataScan(barcode);
+        setBarcode(barcode);
         setShowScannerModal(true);
         await FirebaseService.createParcelRecord({ barcode });
       } catch (error) {
@@ -35,7 +35,7 @@ function BarcodeScanner() {
 
   return (
     <React.Fragment>
-      {showScannerModal && <BarcodeScannerModal hideTheModal={setShowScannerModal} dataScaned={dataScan} />}
+      {showScannerModal && <BarcodeScannerModal setShowScannerModal={setShowScannerModal} barcode={barcode} />}
       {!showScannerModal && (
         <ScannerWindow>
           <BarcodeScannerComponent width={windowSize.width} height={250} onUpdate={onModalUpdate} />

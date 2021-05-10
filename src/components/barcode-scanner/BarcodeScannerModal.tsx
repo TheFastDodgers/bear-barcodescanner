@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const ModalMain = styled.div`
   position: absolute;
@@ -84,17 +85,25 @@ const SrOnly = styled.span`
   white-space: nowrap !important;
 `;
 
-function BarcodeScannerModal(props: any) {
+type BarcodeScannerModalProps = {
+  setShowScannerModal: (value: boolean) => void;
+  barcode: string;
+};
+
+const BarcodeScannerModal: FC<BarcodeScannerModalProps> = ({ setShowScannerModal, barcode }) => {
+  const history = useHistory();
+
   const onButtonClose = useCallback(() => {
-    props.hideTheModal(false);
-  }, [props]);
+    setShowScannerModal(false);
+    history.push('/parcels');
+  }, [history, setShowScannerModal]);
 
   return (
     <ModalMain>
       <ModalBody>
         <ModalInner>
           <div>Code number:</div>
-          <CodeNo>{props.dataScaned}</CodeNo>
+          <CodeNo>{barcode}</CodeNo>
         </ModalInner>
       </ModalBody>
       <ModalButtonBottom>
@@ -106,6 +115,6 @@ function BarcodeScannerModal(props: any) {
       </ModalButtonBottom>
     </ModalMain>
   );
-}
+};
 
 export default BarcodeScannerModal;

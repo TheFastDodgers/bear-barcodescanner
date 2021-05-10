@@ -32,11 +32,20 @@ export async function createParcelRecord(values: any) {
 export async function getParcelRecords() {
   const snapshot = await db.collection(Collections.PARCEL).get();
   return snapshot.docs
-    .map((doc) => doc.data())
+    .map((res) => {
+      const doc: firebase.firestore.DocumentData = res.data();
+      const { id } = res;
+      return { doc, id };
+    })
     .map((data) => {
-      const { values, created } = data;
+      const { id, doc } = data;
+      const { values, created } = doc;
       const { barcode } = values;
       const { seconds } = created;
-      return { barcode, date: new Date(seconds * 1000).toISOString() };
+      return { id, barcode, date: new Date(seconds * 1000).toISOString() };
     });
+}
+
+export async function deleteParcelRecords(id: string) {
+  await db.collection(Collections.PARCEL).doc(id).delete();
 }

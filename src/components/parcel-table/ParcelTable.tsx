@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from '@emotion/styled';
 import * as FirebaseService from '../../services/firebase';
 import ButtonLink from '../navigation/ButtonLink';
@@ -7,7 +7,7 @@ export const Table = styled.table`
   text-align: center;
   border-collapse: collapse;
   border: 1px solid #ddd;
-  width: 400px;
+  width: auto;
   margin: 0 auto;
 
   td,
@@ -26,6 +26,7 @@ export const Table = styled.table`
 `;
 
 interface Parcel {
+  id: string;
   barcode: string;
   date: string;
 }
@@ -48,6 +49,16 @@ function ParcelTable() {
     fetchParcels();
   }, []);
 
+  const onRemove = useCallback(async (id: string) => {
+    try {
+      await FirebaseService.deleteParcelRecords(id);
+      const records = await FirebaseService.getParcelRecords();
+      setParcels(records);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <>
       <h1>Parcels</h1>
@@ -58,16 +69,26 @@ function ParcelTable() {
             <tr>
               <th>barcode</th>
               <th>created</th>
+              <th>delete</th>
             </tr>
           </thead>
           <tbody>
             {parcels.map((parcel, index) => {
-              const { barcode, date } = parcel;
+              const { id, barcode, date } = parcel;
 
               return (
                 <tr key={index}>
                   <td>{barcode}</td>
                   <td>{date}</td>
+                  <td>
+                    <button
+                      onClick={() => {
+                        onRemove(id);
+                      }}
+                    >
+                      x
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -75,11 +96,7 @@ function ParcelTable() {
         </Table>
       )}
 
-      {parcels && parcels.length === 0 && (
-        <>
-          <p>There are no parcels saved.</p>
-        </>
-      )}
+      {parcels && parcels.length === 0 && <p>There are no parcels saved.</p>}
 
       <p>
         <ButtonLink to="/">Go back to home</ButtonLink>

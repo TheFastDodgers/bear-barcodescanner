@@ -16,11 +16,7 @@ function ScannerPage() {
   return (
     <>
       {showScanner && <ScanBarcodes />}
-      {!showScanner && (
-        <>
-          <p>Please use mobile device to scan a barcode</p>
-        </>
-      )}
+      {!showScanner && <p>Please use mobile device to scan a barcode</p>}
       <p>
         <ButtonLink to="/">Go back to home</ButtonLink>
       </p>
