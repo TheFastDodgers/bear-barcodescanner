@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 
+export interface IWindowSize {
+  width: number;
+  height: number;
+}
+
 function UseWindowSize(): IWindowSize {
   const [windowSize, setWindowSize] = useState({
     width: 200,
@@ -26,11 +31,6 @@ function UseWindowSize(): IWindowSize {
   }, []); // Empty array ensures that effect is only run on mount
 
   return windowSize;
-}
-
-export interface IWindowSize {
-  width: number;
-  height: number;
 }
 
 export default UseWindowSize;
